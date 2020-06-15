@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function outer(a, b) {
+            console.log('实参的个数：'+ arguments.length, '；形参的个数' + arguments.callee.length);  // 3， 2 
+            // 函数的l length 表示的是该函数定义了多少个形参
+            // arguments 指的是 该函数被传入了多少个实参
+        }
+
+        outer(1, 2, 3);
+    </script>
+</body>
+</html>
