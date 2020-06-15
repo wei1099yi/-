@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用css text-emphasis对文字进行强调修饰</title>
+    <style>
+        p {
+            color: pink;
+            font-size: 42px;
+            text-shadow: 1px 1px 1px #ccc;
+
+        }
+        span {
+            font: 42px verdana;
+            -webkit-text-emphasis-style: '❤';
+            text-emphasis-style: '❤';
+            -webkit-text-emphasis-color: black;
+            text-emphasis-color: black;
+            text-shadow: 1px 1px 1px #ccc;
+
+        }
+    </style>
+</head>
+<body>
+    <p>傻灵是<span>猪</span></p>
+</body>
+</html>

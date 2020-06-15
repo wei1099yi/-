@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 只有一个参数且参数为正数的情况下，三者会将第一个参数作为截取字符串起始位置的下标，以字符串长度作为第二个参数
+        var stringValue = 'hello world';
+        console.log(stringValue.slice(3)); // lo world
+        console.log(stringValue.substr(3)); // lo world
+        console.log(stringValue.substring(3)); // lo world
+
+        // 有两个参数且参数为正数的情况下，slice 与 substring 会以第一个参数为起点截取的 第二个参数-1 的位置，而 substr 则将第二个参数当作截取的个数
+        console.log(stringValue.slice(3, 7)); // lo w
+        console.log(stringValue.substr(3, 7)); // lo worl
+        console.log(stringValue.substring(3, 7)); // lo w
+
+        // 只有一个参数且参数为负数的情况下，slice 会将字符串长度与负的参数相加，substr 会将负的第一个参数与字符串长度相加，substring 会将负数转为零
+        console.log(stringValue.slice(-3));  // rld
+        console.log(stringValue.substr(-3));  // rld
+        console.log(stringValue.substring(-3)); // hello world
+        // 有两个参数且参数为负数的情况下，slice 会将字符串长度与负的参数相加，substr 会将负的第一个参数与字符串长度相加，substring 会将负数转为零
+        console.log(stringValue.slice(-3, -4));  // 空
+        console.log(stringValue.slice(3, -4));  // lo w
+        console.log(stringValue.substr(-3, -4));  // 空
+        console.log(stringValue.substr(3, -4));  // 空
+        console.log(stringValue.substring(-3, -4));  // 空
+        console.log(stringValue.substring(3, -4));  // hel 相当于 substring(0, 3)
+        console.log(stringValue.substring(3, 0));  // hel 相当于 substring()
+        console.log(stringValue.substring(0, 3));  // hel 相当于 substring()
+    </script>
+</body>
+</html>
