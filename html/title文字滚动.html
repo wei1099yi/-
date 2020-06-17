@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>标题文字滚动超级练习，业精于勤荒于嬉，形成与思毁于随！</title>
+    </head>
+    <body>
+        <script>
+			let titArr, title;
+			
+            setInterval(function () {
+				title = document.title;
+				titArr = title.split("")
+
+                titArr.push(titArr.shift());
+                document.title = titArr.join("");
+            }, 500);
+        </script>
+    </body>
+</html>
