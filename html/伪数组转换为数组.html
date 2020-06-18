@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            // 在 ES6 之前将一个伪数组转换为数组的方法是： [].slice.call() 方法，ES6 则用 Array.from() 方法实现
+            // 首先认识什么是伪数组，伪数组有一个明确的标识：length 属性，并且是以索引的方式进行存储的。以下就是一个非常典型的伪数组。
+            var array = {
+                "0": "a",
+                "1": "b",
+                "2": "c",
+                "3": "d",
+                length: 4,
+            };
+            console.log(array.length);
+
+            function test() {
+                return [].slice.call(arguments, 1, 3);  
+            }
+            /*
+             * 以上函数通过 call() 函数将 [].slice() 中的 this 指向了 arguments，使其拥有了 slice 方法
+             * 而 参数 1，3 则代表 slice 的两个参数，表示将 arguments 从下标 1 截取的 下标 3-1 的位置，
+             */
+            var list = test(4, 5, 6, 7);
+            console.log(list);  // [5，6]
+        </script>
+    </body>
+</html>

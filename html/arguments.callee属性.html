@@ -12,8 +12,8 @@
                 return 1;
             } else {
                 // console.log(factorial);
-                return num * factorial(num - 1);  // factorial 函数被覆盖，返回 0
-                // return num * arguments.callee(num - 1);  // arguments.callee 指向拥有 arguments 本身的函数，即谁调用该函数就指向谁
+                // return num * factorial(num - 1);  // factorial 函数被覆盖，返回 0
+                return num * arguments.callee(num - 1);  // 120 arguments.callee 指向拥有 arguments 本身的函数，即谁调用该函数就指向谁
             } 
         }
 
