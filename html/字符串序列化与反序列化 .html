@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            var strObj = {
+                "events": [
+                  {
+                    "name": "呆瓜",
+                    "age": 24,
+                    "address": "广西"
+                  },
+                  {
+                    "name": "傻孁",
+                    "age": 23,
+                    "address": "广西"
+                  }
+                ],
+            };
+            
+            console.log(typeof(JSON.stringify(strObj)));  // string 将对象转换为JSON格式的字符串，称为字符串序列化
+            strObj = JSON.stringify(strObj);
+            console.log(typeof(JSON.parse(strObj)));  // object 将JSON格式的字符串转换为对象，称为字符串反序列化
+        </script>
+    </body>
+</html>

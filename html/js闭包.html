@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            function aaa() {
+                var a = 1;
+                return function () {
+                    alert(a++);
+                };
+            }
+            var fun = aaa();
+
+            fun(); // 1  执行后 a++，，然后a还在~
+            fun(); // 2
+            fun = null;
+
+            // 全局变量的累加
+            var a = 1;
+            function abc() {
+                a++;
+                alert(a);
+            }
+            abc(); //2
+            abc(); //3
+
+            // 局部变量不会累加
+            function abc() {
+                var a = 1;
+                a++;
+                alert(a);
+            }
+            abc(); //2
+            abc(); //2
+
+            // 使用闭包使局部变量累加
+            function outer() {
+                var x = 10;
+                return function() {
+                    x++;
+                    alert(x);
+                }
+            }
+            var y = outer();;
+            y();  // 11
+            y();  // 12
+        </script>
+    </body>
+</html>

@@ -7,6 +7,8 @@
 </head>
 <body>
     <script>
+        // apply 有两个参数 1.函数上下文的对象，2.函数参数组成的数组
+    
         function sum(num1, num2) {
             console.log(this);  // callSum1 与 callSum2 将全局作用域的 this 传入 sum，索引这里的 this 指向全局的 window
             return num1 + num2;
@@ -36,6 +38,16 @@
         }
 
         callSum(10, 21);  // 此时 callSum 函数将全局的 this（即 window） 传入obj.sum 函数内，此时该函数的 this 指向的是 window
+
+
+        // call 有两个参数 1.函数上下文的对象，2.函数的参数列表（必须是列表不能s数组）
+        var obj = {
+            "name": "wei"
+        }
+        function func(firstName, lastName) {
+            console.log(firstName + ' ' + this.name + ' ' + lastName);  // A wei B
+        }
+        func.call(obj, 'A', 'B');
     </script>
 </body>
 </html>
