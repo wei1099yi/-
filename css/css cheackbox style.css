@@ -136,7 +136,7 @@ body .ondisplay section:after {
   height: 22px;
   background: linear-gradient(to bottom, #fcfff4 0%, #fcfff4 40%, #b3bead 100%);
   border-radius: 50%;
-  transition: all .2s;
+  transition: all 0.2s;
 }
 
 .slideTwo label::after {
