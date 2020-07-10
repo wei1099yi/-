@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>判断元素是否在视口内</title>
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+            }
+            #box {
+                position: relative;
+                width: 100%;
+                height: 4000px;
+                background-color: red;
+            }
+            .box1 {
+                position: absolute;
+                top: 1500px;
+                left: 200px;
+                width: 200px;
+                height: 200px;
+                background: green;
+                opacity: 0;
+                transition: all 0.5s ease;
+                transform: translate3d(-200%, 0, 0);
+            }
+            .elemAnimationIn {
+                opacity: 1;
+                transform: translate3d(0%, 0, 0);
+            }
+        </style>
+    </head>
+    <body>
+        <div id="box">
+            <div id="box1" class="box1">box1</div>
+        </div>
+        <script>
+            var box1 = document.getElementById("box1");
+
+            function isInViewPort(elem) {
+                var viewPortHeight = innerHeight; // 视口高度
+                var elemOffsetTop = elem.offsetTop; // 元素距离文档顶部的高度
+                var elemHeight = elem.getBoundingClientRect().height; // 元素自身的高度
+                var scrollTop = document.documentElement.scrollTop; // 滚动条的高度位置
+
+                if (
+                    elemHeight / 2 + elemOffsetTop - viewPortHeight <=
+                        scrollTop &&
+                    elemOffsetTop + elemHeight / 2 > scrollTop
+                ) {
+                    elem.classList.add("elemAnimationIn");
+                    console.log("出现！");
+                } else {
+                    elem.classList.remove("elemAnimationIn");
+                    console.log("消失！");
+                }
+            }
+
+            window.addEventListener("scroll", function () {
+                isInViewPort(box1);
+            });
+        </script>
+    </body>
+</html>
