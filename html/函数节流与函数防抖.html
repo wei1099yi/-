@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>函数节流与函数防抖</title>
+        <style>
+            body {
+                width: 100%;
+                height: 3000px;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            /* ********防抖****** */
+            // {
+            //     function debounce(fn, wait) {
+            //         var timeout = null;
+
+            //         return function () {
+            //             if (timeout !== null) clearTimeout(timeout);
+            //             timeout = setTimeout(fn, wait);
+            //         };
+            //     }
+
+            //     // 处理函数
+            //     function handle() {
+            //         console.log(Math.random());
+            //     }
+
+            //     // 滚动事件
+            //     window.addEventListener("scroll", debounce(handle, 1000));
+            // }
+
+            /* ********节流方法 1：时间戳****** */
+            function throttle(func, delay) {
+				var prev = Date.now();
+				console.log('prev:' + prev);
+
+                return function () {
+                    var context = this;
+                    var args = arguments;
+					var now = Date.now();
+
+					console.log('now :' + now + '\n');
+
+                    if (now - prev >= delay) {
+                        func.apply(context, args);
+                        prev = Date.now();
+                    }
+                };
+            }
+
+            function handle() {
+                console.log("节流方法 1：时间戳");
+            }
+
+            window.addEventListener("scroll", throttle(handle, 1000));
+
+            /* ********节流方法 1：定时器****** */
+        </script>
+    </body>
+</html>
