@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>html5自定义属性</title>
+</head>
+<body>
+	<div class="box">
+		<h1  data-animal-type="鱼类" data-price="20">手动定义的属性：<span id="sd"></span></h1>
+		<h1>自动定义的属性：<span id="zd"></span></h1>
+	</div>
+	<script src="../js/jquery-1.12.1.min.js"></script>
+	<script>
+		var sd = document.querySelector('#sd');
+		var sdParent = sd.parentNode;
+		var zd = document.querySelector('#zd');
+		var zdParent = zd.parentNode;
+
+		// 获取自定义属性对象
+		 console.log(sd.dataset);  // DOMStringMap {animal: "鱼类", price: "20"}
+		 // 获取price自定义属性的值
+		 console.log(sdParent.dataset.price);  // 20
+		 // 获取animal-type自定义属性的值(使用驼峰法)
+		 console.log(sdParent.dataset['animalType']);  // 鱼类
+		 console.log(sdParent.dataset['animal-ype']);  // underfined
+
+		 /* ********设置属性******** */
+		 // 使用setAttribute设置xxx属性
+		 zdParent.setAttribute('data-animal-type', '肉类');
+		 // 使用dataset设置添加自定义属性yyy(自动添加"data-"前缀)
+		 zdParent.dataset.price = '30';
+		 // 使用getAttribute读取自定义属性(不能漏掉"data-"前缀)
+		 console.log(zdParent.getAttribute("data-price")) //20
+    	// 使用setAttribute修改自定义属性(不能漏掉"data-"前缀)
+    	zdParent.setAttribute("data-animal-type","水里游的")
+
+		setArrt(sd);
+		setArrt(zd);
+
+
+		function setArrt(elem) {
+			var elemParentDataset = elem.parentNode.dataset;
+
+			elem.innerHTML = JSON.stringify(elemParentDataset);
+		}
+
+	</script>
+</body>
+</html>
