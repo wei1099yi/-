@@ -9,9 +9,20 @@
                 width: 100%;
                 height: 3000px;
             }
+            .box {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
         </style>
     </head>
     <body>
+        <div class="box">
+            <h1>
+                防抖和节流的区别：防抖是将多次执行变为最后一次执行，节流是将多次执行变为每隔一段时间执行
+            </h1>
+        </div>
         <script>
             /* ********防抖****** */
             // {
@@ -19,8 +30,8 @@
             //         var timeout = null;
 
             //         return function () {
-            //             if (timeout !== null) clearTimeout(timeout);
-            //             timeout = setTimeout(fn, wait);
+            //             if (timeout) clearTimeout(timeout);   // 鼠标只要滚动就会清除定时器，下面一句代码虽然会被执行，但是一直会被清除，所有执行不了
+            //             timeout = setTimeout(fn, wait);  // 这一句只用鼠标不再滚动才会被执行，而且是规定时间后才执行
             //         };
             //     }
 
@@ -33,32 +44,103 @@
             //     window.addEventListener("scroll", debounce(handle, 1000));
             // }
 
-            /* ********节流方法 1：时间戳****** */
-            function throttle(func, delay) {
-				var prev = Date.now();
-				console.log('prev:' + prev);
+            /* ********
+				节流方法 1：时间戳: 
+					1. 定义 变量 prev 记录滚动事件 throttle() 第一次运行的时间
+					2. 定义回调函数，这样鼠标每滚动一次就会触发一次回调函数
+						回调函数里边定义 now 变量记录当前鼠标滚动的时间
+						判断 now - prev 是否大于 delay (打开页面后，一般不会立即滚动鼠标，所有 now 记录的时间减去 prev 记录的时间必将大于传入的 delay 间隔时间，所以页面第一次滚动必将执行 handle())
+						重置 prev 为当前时间
+			****** */
+            // function throttle(func, delay) {
+            //    var prev = Date.now();
 
-                return function () {
-                    var context = this;
-                    var args = arguments;
-					var now = Date.now();
+			//    return function () {
+			// 	   var now = Date.now();
+			// 	   var context = this;  // this 指向 window
+			// 	   var args = arguments;
 
-					console.log('now :' + now + '\n');
+			// 	   if (now - prev >= delay) {
+			// 		//    func();
+			// 		   func.apply(context, args);
+			// 		   prev = Date.now();
+			// 	   }
 
-                    if (now - prev >= delay) {
-                        func.apply(context, args);
-                        prev = Date.now();
-                    }
-                };
+			//    }
+            // }
+
+            // function handle() {
+            //     console.log("节流方法 1：时间戳");
+            // }
+
+            // window.addEventListener("scroll", throttle(handle, 1000));  // throttle 方法加了括号，会立即执行
+
+            /* ********
+				节流方法 2：定时器
+				1. 定义 timer 变量为 null
+				2. 定义回调函数，回调函数中判断 timer 是否为 null，如为 null 则将 timer 变量赋值给一个定时器
+				3。 定时器中运行 handle() 函数，运行完后将 timer 从新赋值为 null，证明可以进行下一次鼠标滚动事件处理了
+			****** */
+			// function throttle(func, delay) {
+			// 	var timer = null;
+
+			// 	return function () {
+			// 		var context = this;  // this 指向 window
+			// 	   	var args = arguments;
+
+			// 		if (!timer) {  // 第一次执行
+			// 			timer = setTimeout(function () {
+			// 				func.apply(context, args);
+			// 				timer = null;
+			// 			}, delay);
+			// 		}
+			// 	};
+			// }
+
+			// function handle() {
+            //     console.log("节流方法 2：定时器");
+            // }
+
+            // window.addEventListener("scroll", throttle(handle, 1000));  // throttle 方法加了括号，会立即执行
+
+
+			/* ************
+				单用时间戳或者定时器都有缺陷，我们更希望第一次触发马上执行函数，最后一次触发也可以执行一次事件处理函数
+				两者结合实现如下：
+				1。 定义 timer = null，保存定时器对象
+				2. 定义变量 startTime 保存开始时间，
+				3. 定义回调函数
+					3.1 定义变量 curTime 保存当前滚动时的时间
+					3.2 定义 remainning 变量保存 剩余时间，即：间隔时间(delay) - (当前时间(curTime) - (开始时间(startTime))) => remaining = delay - (curTime - startTime)
+					3.3 清除前一个定时器（假如在剩余时间内鼠标又滚动了，此时需要清除前一个定时器，以便终止前一个定时器触发的效果）
+					3.4 判断 remainning 剩余时间是否小于等于零（小于的话说明 当前时间 与 开始时间 的时间间隔已经大大大于 提供的间隔时间了，理应立即运行函数输出结果）,将startTime 设置为当前时间
+					3.5 remainning 大于零，说明剩余还未到达间隔的时间，不应运行函数，应在剩余多少时间后再运行函数输出结果
+			************** */
+			function throttle(func, delay) {
+				var timer = null;
+				var startTime = Date.now();  // 开始时间
+
+				return function () {
+					var curTime = Date.now();  // 当前时间
+					var remainning = delay - (curTime - startTime); // 剩余时间
+					var context = this;
+					var args = arguments;
+
+					clearTimeout(timer);
+					if (remainning <= 0) {
+						func.apply(context, args);
+						startTime = Date.now();
+					} else {
+						timer = setTimeout(func, remainning);
+					}
+				}
+			}
+
+			function handle() {
+                console.log("节流方法 3：时间戳与定时器结合");
             }
 
-            function handle() {
-                console.log("节流方法 1：时间戳");
-            }
-
-            window.addEventListener("scroll", throttle(handle, 1000));
-
-            /* ********节流方法 1：定时器****** */
+            window.addEventListener("scroll", throttle(handle, 1000));  // throttle 方法加了括号，会立即执行
         </script>
     </body>
 </html>
