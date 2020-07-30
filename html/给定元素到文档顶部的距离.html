@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>给定元素到文档顶部的距离</title>
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+            }
+            h1,
+            h2,
+            h3 {
+                padding: 40px 0;
+            }
+            #box {
+                height: 2000px;
+                text-align: center;
+                background-color: green;
+            }
+            #box1 {
+                background-color: rgb(245, 149, 149);
+            }
+            #box1-1 {
+				padding: 5% 0;
+                background-color: rgb(0, 68, 128);
+				border: 10px solid #115325;
+				box-sizing: border-box;
+
+            }
+            #box1-1.fixed {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+            }
+            #box1-2 {
+                background-color: rgb(182, 91, 6);
+            }
+        </style>
+    </head>
+    <body>
+        <div id="box">
+            <h1>box</h1>
+            <div id="box1">
+                <h2>box1</h2>
+                <div id="box1-1">
+                    <h3>box1-1</h3>
+                </div>
+                <div id="box1-2">
+                    <h3>box1-2</h3>
+                </div>
+            </div>
+        </div>
+        <script src="../js/jquery-1.12.1.min.js"></script>
+        <script>
+            var box1_1 = $("#box1-1");
+            var box1_2 = $("#box1-2");
+
+            function toFixed(elem, funcIf, funcElse, className) {
+				var args = arguments;
+				$(elem).data("offsetTop", $(elem).offset().top);
+
+                return function () {
+                    var offsetTop = $(elem).data('offsetTop');
+                    var scrollHeight = $(window).scrollTop();
+
+                    if (scrollHeight >= offsetTop) {
+                        funcIf(args);
+                    } else {
+                        funcElse(args);
+                    }
+                };
+            }
+
+            $(window).scroll(
+                toFixed(
+                    box1_1,
+                    function () {
+						var args = arguments[0];
+
+                        $(args[0]).addClass(args[3]).next().css("marginTop", $(args[0]).outerHeight(true));
+                    },
+                    function () {
+						var args = arguments[0];
+
+                        $(args[0]).removeClass(args[3]).next().css("marginTop", 0);
+                    },
+                    "fixed"
+                )
+            );
+        </script>
+    </body>
+</html>
