@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>判断鼠标进入元素的角度</title>
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+		}
+		html, body, #box {
+			width: 100%;
+			height: 100%;
+		}
+		#box {
+			box-sizing: border-box;
+			display: table;
+			border: 1px solid red;
+			perspective: 300px
+		}
+		#box1 {
+			position: relative;
+			display: table-cell;
+			text-align: center;
+			vertical-align: middle;
+			transform-style: preserve-3d;
+			transform: rotate3d(0, 0, 0, 90deg);
+			transform-origin: 50% 50% -100px;
+			animation: .3s ease-in forwards;
+		}
+		#box1.top-in {
+			/* transform: rotate3d(1, 0, 0, -90deg); */
+		}
+		#box1.top-in #box1_2 {
+			transform-origin: bottom;
+			transform: translate3d(-50%, -150%, -1px) rotateX(90deg);
+		}
+		#box1 * {
+			display: inline-block;
+			width: 200px;
+			height: 200px;
+			font-size: 24px;
+			line-height: 200px;
+		}
+		#box1_1 {
+			background-color: rgba(255, 192, 203, 0.714);
+			border: 1px solid green;
+		}
+		#box1_2 {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			background-color: rgba(192, 254, 255, 0.387);
+			border: 1px solid rgb(0, 21, 128);
+			transform: translate3d(-50%, -50%, -1px);
+		}
+		@keyframes top-in {
+			0% {}
+			100% {}
+		}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<div id="box1" class="top-in">
+			<div id="box1_1">1_1</div>
+			<div id="box1_2">1_2</div>
+		</div>
+	</div>
+</body>
+<script src="../js/jquery-1.12.1.min.js"></script>
+<script>
+	$('#box1_1').on('mouseenter mouseleave', function (e) {
+		var $this = $(this);
+		var w = $this.outerWidth();
+		var h = $this.outerHeight();
+		var x = e.pageX - $this.offset().left - w/2;
+		var y = e.pageY - $this.offset().top - h/2;
+		y = y > 0 ? -y : Math.abs(y);
+		var angle = Math.atan2(y, x) / (Math.PI / 180);
+		angle = angle < 0 ? Math.round((360 + angle) * 10) / 10 : Math.round(angle * 10) / 10;
+
+
+		switch (true) {  // 注意这里！！！！
+			case angle >= 45 && angle <= 135:
+				console.log("top");
+
+				break;
+			case angle > 135 && angle <= 225:
+				console.log("left");
+				break;
+			case angle > 225 && angle <= 315:
+				console.log("bottom");
+				break;
+			case (angle > 315 && angle <= 360) || (angle >= 0 && angle < 45):
+				console.log("right");
+				break;
+		}
+		
+	});
+</script>
+</html>
