@@ -32,10 +32,12 @@
 							padding-bottom: 28px;
 						}
 						td:last-child {
+							display: none;
 							position: absolute;
 							bottom: 0;
 							left: 0;
-							visibility: hidden;
+							/* visibility: hidden; */
+							transition: all .3s;
 						}
         </style>
     </head>
@@ -54,7 +56,7 @@
                                 onchange=" checkuse()"
                             />
                         </td>
-                        <td id="checktext1">* 用户名由6-18位字符组成</td>
+                        <td id="checktext1">* 用户名由6-18位中文或字母或数字字符组成</td>
                     </tr>
 
                     <!-- onblur 事件处理程序:当元素或窗口失去焦点时触发该事件 -->
@@ -206,16 +208,20 @@
                 //在每个函数中定义check变量是为了在表单提交后，能够逐个验证每个函数是否通过，很好很好。（以下同理）
                 var check;
                 var username = document.getElementById("username").value;
-                if (username.length > 18 || username.length < 6) {
-										// alert("用户名输入不合法，请重新输入！");
-										document.getElementById("checktext1").style.visibility = 'visible'
-                    //此处甚妙，既然你在此处输入错误，那么按理说当然要在此处继续输入了。（在此处继续获取焦点！）
-                    document.getElementById("username").focus();
-                    check = false;
-                } else {
-										document.getElementById("checktext1").style.visibility = 'hidden'
-                    document.getElementById("checktext1").innerHTML =
-                        "* 用户名由6-18位字符组成 √";
+								var reg = /^[\u4e00-\u9fa5\w]{6,18}$/
+								console.log(!reg.test(username));
+
+								if (!reg.test(username)) {
+									document.getElementById("checktext1").style.display = 'block';
+									// alert("用户名输入不合法，请重新输入！");
+                  //此处甚妙，既然你在此处输入错误，那么按理说当然要在此处继续输入了。（在此处继续获取焦点！）
+									document.getElementById("username").focus();
+                  check = false;
+								}
+                 else {
+										document.getElementById("checktext1").style.display = 'none';
+                    // document.getElementById("checktext1").innerHTML =
+                    //     "* 用户名由6-18位字符组成 √";
                     check = true;
                 }
                 return check;
@@ -224,12 +230,12 @@
             function checkpwd() {
                 var check;
                 var reg = /[^A-Za-z0-9_]+/;
-                var regs = /^[a-zA-Z0-9_\u4e00-\u9fa5] + $ /;
+                var regs = /^[a-zA-Z0-9]+$/;
                 var password = document.getElementById("password").value;
                 if (
                     password.length < 6 ||
                     password.length > 18 ||
-                    regs.test(password)
+                    !regs.test(password)
                 ) {
                     alert("密码输入不合法，请重新输入！");
                     document.getElementById("password").focus();
