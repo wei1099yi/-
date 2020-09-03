@@ -29,15 +29,10 @@
 						tr {
 							position: relative;
 							display: inline-block;
-							padding-bottom: 28px;
 						}
 						td:last-child {
-							display: none;
-							position: absolute;
-							bottom: 0;
-							left: 0;
-							/* visibility: hidden; */
-							transition: all .3s;
+							display: block;
+							visibility: hidden;
 						}
         </style>
     </head>
@@ -212,14 +207,14 @@
 								console.log(!reg.test(username));
 
 								if (!reg.test(username)) {
-									document.getElementById("checktext1").style.display = 'block';
+									document.getElementById("checktext1").style.visibility = 'visible';
 									// alert("用户名输入不合法，请重新输入！");
                   //此处甚妙，既然你在此处输入错误，那么按理说当然要在此处继续输入了。（在此处继续获取焦点！）
 									document.getElementById("username").focus();
                   check = false;
 								}
                  else {
-										document.getElementById("checktext1").style.display = 'none';
+										document.getElementById("checktext1").style.visibility = 'hidden';
                     // document.getElementById("checktext1").innerHTML =
                     //     "* 用户名由6-18位字符组成 √";
                     check = true;
@@ -306,6 +301,7 @@
                     alert("请填写出生日期！");
                     document.getElementById("txtDate").focus();
                     check = false;
+										retur
                 } else {
                     document.getElementById("checktext6").innerHTML =
                         "* 请选择你的出生日期 √";
