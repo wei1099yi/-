@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>textarea实现高度自适应1(使用原型链)</title>
+        <style>
+            textarea {
+                overflow: hidden;
+                resize: none;
+                box-sizing: border-box;
+                outline: none;
+                /* font-size: 14px; */
+            }
+        </style>
+    </head>
+    <body>
+        <form action="">
+            <label for="textarea">
+                多选框：
+                <textarea
+                    name=""
+                    id="textarea"
+                    placeholder="请输入文字"
+                    data-placeholder="这是占位文字"
+                ></textarea>
+            </label>
+        </form>
+        <script>
+            function AutoSize(el) {
+                if (!el) {
+                    throw new Error("el 不能为空！");
+                }
+                const attrs = [
+                    "box-sizing",
+                    "padding-top",
+                    "padding-bottom",
+                    "border-top",
+                    "border-bottom",
+                ];
+                // 初始化信息
+                this.el = el;
+                this.heightOffset = 0;
+                this.elStyle = window.getComputedStyle(el);
+                const [
+                    boxSizing,
+                    paddingTop,
+                    paddingBottom,
+                    borderTop,
+                    borderBottom,
+                ] = attrs.map((item) => this.elStyle.getPropertyValue(item)); // getPropertyValue() 方法返回指定的 CSS 属性的值。
+
+                if (boxSizing === "content-box") {
+                    this.heightOffset =
+                        -parseFloat(paddingTop) - parseFloat(paddingBottom);
+                } else {
+                    this.heightOffset =
+                        parseFloat(borderTop) + parseFloat(borderBottom);
+                }
+                // console.log(this instanceof AutoSize);
+                this.initEvent();
+            }
+
+            AutoSize.prototype = {
+                initEvent() {
+                    // console.log(this); // AutoSize {el: textarea#textarea}
+                    this.listener = this.handleAction.bind(this);
+                    // this.listener();
+                    this.el.addEventListener(
+                        "input",
+                        throttle(this.listener, 500)
+                    );
+                },
+                handleAction() {
+                    this.el.style.height = "";
+                    console.log(this.el.scrollHeight);
+                    this.el.style.height =
+                        this.el.scrollHeight +
+                        this.heightOffset +
+                        "px";
+                },
+            };
+
+            /* 节流防抖函数
+						func: 要执行的函数
+						dalay：延迟的时间
+ 						*/
+            function throttle(func, delay) {
+                let timer = null;
+                let startTime = Date.now(); // 开始时间
+
+                return function () {
+                    let curTime = Date.now(); // 触发事件时的时间
+                    let remainning = delay - (curTime - startTime); // 剩余时间
+
+                    clearInterval(timer);
+                    if (remainning <= 0) {
+                        func();
+                        startTime = Date.now();
+                    } else {
+                        timer = setTimeout(func, remainning);
+                    }
+                };
+            }
+            let textarea = document.getElementById("textarea");
+            let autoSize = new AutoSize(textarea);
+        </script>
+    </body>
+</html>
