@@ -50,6 +50,11 @@
                     borderBottom,
                 ] = attrs.map((item) => this.elStyle.getPropertyValue(item)); // getPropertyValue() 方法返回指定的 CSS 属性的值。
 
+								/* 
+									scrollHeight 包含 padding 但不包含 border，也就是说当 box-sizing 为以下两者时计算方法为
+									content-box: scrollHeight = height + paddingTop + paddingBottom
+									border-box: height = scrollHeight + borderTop + borderBottom (因为 scrollHeight 包含 padding，所以不用加 padding的值了)
+								 */
                 if (boxSizing === "content-box") {
                     this.heightOffset =
                         -parseFloat(paddingTop) - parseFloat(paddingBottom);
@@ -72,12 +77,8 @@
                     );
                 },
                 handleAction() {
-                    this.el.style.height = "";
-                    console.log(this.el.scrollHeight);
-                    this.el.style.height =
-                        this.el.scrollHeight +
-                        this.heightOffset +
-                        "px";
+                    this.el.style.height = "";// 每次都要将 height 归零并重新计算
+                    this.el.style.height = this.el.scrollHeight + this.heightOffset + "px";
                 },
             };
 
